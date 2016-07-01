@@ -3,3 +3,4 @@
 - jQuery
 - Bootstrap
 - PHP
+- JavaScript
