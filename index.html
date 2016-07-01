@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css">
+    <style type="text/css">
+    #refreshImageLoader {
+        position: relative;
+    }
+
+    #refreshImageLoader span {
+        display: block;
+        bottom: 0px;
+        width: 9px;
+        height: 5px;
+        background: #9b59b6;
+        position: absolute;
+        animation: refreshImageLoader 1.5s infinite ease-in-out;
+    }
+
+    #refreshImageLoader span:nth-child(2) {
+        left: 11px;
+        animation-delay: .2s;
+    }
+
+    #refreshImageLoader span:nth-child(3) {
+        left: 22px;
+        animation-delay: .4s;
+    }
+
+    #refreshImageLoader span:nth-child(4) {
+        left: 33px;
+        animation-delay: .6s;
+    }
+
+    #refreshImageLoader span:nth-child(5) {
+        left: 44px;
+        animation-delay: .8s;
+    }
+
+    @keyframes refreshImageLoader {
+        0% {
+            height: 5px;
+            transform: translateY(0px);
+            background: #9b59b6;
+        }
+        25% {
+            height: 30px;
+            transform: translateY(15px);
+            background: #3498db;
+        }
+        50% {
+            height: 5px;
+            transform: translateY(0px);
+            background: #9b59b6;
+        }
+        100% {
+            height: 5px;
+            transform: translateY(0px);
+            background: #9b59b6;
+        }
+    }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="jumbotron">
+        		<h1>REST response based change the status in FrontEnd</h1>
+        		<hr>
+            <br>
+            <h4>Bootstrap font Awesome method</h4>
+            <div style="margin:3em;">
+                <br>
+                <button type="button" class="btn btn-primary btn-lg" id="load" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Uploading">8 Sec call</button>
+            </div>
+            <h4>jQuery method</h4>
+            <div style="margin:3em;">
+                <a href="#" id="refreshImageListBtn" class="btn btn-success btn-lg" role="button" onclick="refreshImageList()">Hit the call</a>
+                <div id="refreshImageLoader">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+            <script>
+            $('.btn').on('click', function() {
+                var $this = $(this);
+                $this.button('loading');
+                setTimeout(function() {
+                    $this.button('reset');
+                }, 5000);
+            });
+            $(function() {
+                $('#refreshImageLoader').hide();
+            });
+
+            function refreshImageList() {
+                $('#refreshImageListBtn').hide();
+                $('#refreshImageLoader').show();
+                $('#ajaxcontent').html('');
+
+                // $('#refreshImageListBtn').addClass('disabled').attr('disabled', true);
+                setTimeout(function() {
+                        $.ajax({
+                            type: "GET",
+                            url: "ajaxCallsInPHP/first.php",
+                            cache: false,
+                            success: function(res) {
+                                console.log('First Call');
+                                $('#ajaxcontent').append(res + '<br>');
+                                $('#refreshImageListBtn').text('First call updated');
+                            }
+                        })
+                    }, 100),
+                    setTimeout(function() {
+                        $.ajax({
+                            type: "GET",
+                            url: "ajaxCallsInPHP/second.php",
+                            cache: false,
+                            success: function(res) {
+                                console.log('Second Call');
+                                $('#ajaxcontent').append(res + '<br>');
+                                $('#refreshImageListBtn').text('Second call updated');
+                            }
+                        })
+                    }, 1000),
+                    setTimeout(function() {
+                        $.ajax({
+                            type: "GET",
+                            url: "ajaxCallsInPHP/third.php",
+                            cache: false,
+                            success: function(res) {
+                                console.log('Third Call');
+                                $('#ajaxcontent').append(res + '<br>');
+                                $('#refreshImageListBtn').text('Third call updated');
+                                // $('#refreshImageListBtn').removeClass('disabled').attr('disabled', false);
+                                $('#refreshImageListBtn').text('Hit the call');
+                                $('#refreshImageLoader').hide();
+                                $('#refreshImageListBtn').show();
+                            }
+                        })
+                    }, 3000)
+            }
+            </script>
+            <br>
+            <p id="ajaxcontent"></p>
+        </div>
+    </div>
+</body>
+
+</html>
